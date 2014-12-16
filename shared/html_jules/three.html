@@ -1,0 +1,273 @@
+<!DOCTYPE html  >
+<html>
+ 
+  <head >
+	    <meta charset="utf8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Three JS </title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+          <link type="text/css" rel="stylesheet" href="stylesheet.css"></link>
+          <style>canvas { width: 100%; height: 100% }</style>
+  </head>
+  <body>
+	<script src="js/three.min.js"></script> 
+	
+	<script> 
+
+
+			var scene = new THREE.Scene(); 
+			var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ); 
+			var renderer = new THREE.WebGLRenderer({antialias : true}); 
+			renderer.setSize( window.innerWidth, window.innerHeight ); 
+			document.body.appendChild( renderer.domElement );
+	
+			renderer.setClearColor( 0x000400, 1);
+			
+			var id = 1;
+			var numberOfCubes = 500;
+			var numberOfTetraH = 80;
+			
+			var negate1;
+			var negate2;
+			var TurningX = true;
+			
+			var CubeArray = new Array() ;
+			var TetraArray = new Array();
+			var TetraDirArray = new Array();
+			var DirArray = new Array();
+			var LightArray = new Array();
+
+			var turnX = false;
+			var turnY = false;
+			var turnZ = false;
+			var dirLockX = true;
+			var dirLockY = true;
+			var dirLockZ = true;
+			var randSpeedX = 1;
+			var randSpeedY = 1 ;
+			var randSpeedZ = 1;
+			var rotSpeed;
+		
+	/*
+		var TetGeom = new THREE.TetrahedronGeometry(1,0);
+		var TetMate = new THREE.MeshPhongMaterial({ color : 0xaaaaaa });
+		var newTetraH = new THREE.Mesh( TetGeom, TetMate );
+		newTetraH.position.set(4,4,4);
+		scene.add(newTetraH);
+	*/
+		var light = new THREE.PointLight();
+		light.position.set(50, 150, 150);
+		//scene.add(light);
+		
+		
+		 var spotLight = new THREE.SpotLight( 0xffffff ); 
+		 spotLight.position.set( 1, 1, 1 ); 
+		 spotLight.castShadow = true; 
+		 spotLight.shadowMapWidth = 1024; 
+		 spotLight.shadowMapHeight = 1024; 
+		 spotLight.shadowCameraNear = 500; 
+		 spotLight.shadowCameraFar = 4000; 
+		 spotLight.shadowCameraFov = 30; 
+		 
+		 //scene.add( spotLight );
+			//ADD LIGHTS
+	
+			
+			for ( var tmp = 0; tmp < 1 ; tmp ++ ) {
+				LightArray[tmp]= new THREE.SpotLight(0xffffff );
+				
+				LightArray[tmp].position.set( Math.random()*20, Math.random()*20, Math.random()*20 ); 
+				
+				LightArray[tmp].castShadow = true; 
+				LightArray[tmp].shadowMapWidth = 1024; 
+				LightArray[tmp].shadowMapHeight = 1024; 
+				LightArray[tmp].shadowCameraNear = 500; 
+				LightArray[tmp].shadowCameraFar = 4000; 
+				LightArray[tmp].shadowCameraFov = 30; ;
+				
+				//scene.add(LightArray[tmp]);
+			}
+			
+			var pointLight = new THREE.PointLight( 0xfffff0, 1, 100 ); 
+			light.position.set( 5, 5, 5 ); 
+			scene.add( pointLight );
+			var pointLight2 = new THREE.PointLight( 0xff0000, 1, 100 ); 
+			light.position.set( -10, -7, -5 ); 
+		//	scene.add( pointLight2 );
+			
+			//ADD CUBES
+			for ( var cnt = 0; cnt < numberOfCubes; cnt++) {
+			
+				CubeArray[cnt]= randomCube();
+				DirArray[cnt]= (Math.random()<0.5 ? -1 : 1);
+				//CubeArray[cnt].materials[0].opacity = 1 + Math.sin(new Date().getTime() * .0025);
+				
+				scene.add(CubeArray[cnt]);
+				}
+			
+			for ( var cnt = 0; cnt < numberOfTetraH; cnt++) {
+			
+				TetraArray[cnt]= randomTetra();
+				TetraDirArray[cnt]= (Math.random()<0.5 ? -1 : 1);
+				scene.add(TetraArray[cnt]);
+				}
+
+			
+
+			camera.position.z = 5;
+			camera.up = new THREE.Vector3(-100,0,-100);
+			//camera.lookAt(new THREE.Vector3(100,-100,-1000));
+			camera.lookAt(new THREE.Vector3(0,-100,00));
+			
+			
+
+			function randomCube () {
+				
+				var thisId = id++;
+				var geom = new THREE.CubeGeometry(Math.random() * 1, Math.random() * 1, Math.random() * 1);
+				var mater = new THREE.MeshPhongMaterial( { 
+					color: Math.random() * 0xffffff ,
+					specular : 0xffff00,
+					shininess: 60,
+					shading: THREE.FlatShading,
+					wireframe : false,
+					vertexColors : THREE.NoColors
+					
+					
+					});
+				var materAlt = new THREE.MeshLambertMaterial( {
+					color: Math.random() * 0xffffff ,
+					shading: THREE.FlatShading,
+					
+					} );
+				
+	
+				var newCube = new THREE.Mesh( geom, mater)
+				
+
+
+				
+				 Math.random()<0.5 ? negate1 = -1 : negate1 = 1;
+				 Math.random()<0.5 ? negate2 = -1 : negate2 = 1;
+				
+				newCube.position.x = Math.random() * 12 * negate1;
+
+				newCube.position.y = Math.random() * 12 * negate2;
+				
+				newCube.position.z = Math.random() * 10;
+			
+				return newCube;
+				
+				}
+				
+			function randomTetra () {
+				
+				var thisId = id++;
+				//var geom = new THREE.TetrahedronGeometry(Math.random() * 1, 0);
+				var geom = new THREE.TorusGeometry( 0.5, 0.20, 30, 100 )
+				var mater = new THREE.MeshPhongMaterial( { 
+					color: Math.random() * 0xffffff ,
+					specular : 0xffff00,
+					shininess: 100,
+					shading: THREE.FlatShading,
+					wireframe : false,
+					vertexColors : THREE.VertexColors
+					
+					
+					});
+				
+	
+				var newTetra = new THREE.Mesh( geom, mater)
+				
+
+
+				
+				 Math.random()<0.5 ? negate1 = -1 : negate1 = 1;
+				 Math.random()<0.5 ? negate2 = -1 : negate2 = 1;
+				
+				newTetra.position.x = Math.random() * 12 * negate1;
+
+				newTetra.position.y = Math.random() * 12 * negate2;
+				
+				newTetra.position.z = Math.random() * 10;
+			
+				return newTetra;
+				
+				}
+
+			
+		function render() { 
+				
+				for ( var cnt = 0; cnt < numberOfCubes; cnt++){
+					
+					DirArray[cnt]===1 ? CubeArray[cnt].rotation.x = (CubeArray[cnt].rotation.x + 0.01 ) : CubeArray[cnt].rotation.x = (CubeArray[cnt].rotation.x - 0.01 )
+					DirArray[cnt]===1 ? CubeArray[cnt].rotation.y = (CubeArray[cnt].rotation.y + 0.01 ) : CubeArray[cnt].rotation.y = (CubeArray[cnt].rotation.y - 0.01 )
+					DirArray[cnt]===1 ? CubeArray[cnt].rotation.z = (CubeArray[cnt].rotation.z + 0.01 ) : CubeArray[cnt].rotation.z = (CubeArray[cnt].rotation.z - 0.01 )
+				
+				
+					
+				/*		
+					DirArray[cnt]===1 ? CubeArray[cnt].rotation.x = (CubeArray[cnt].rotation.x + Math.sin(new Date().getTime()) ) : CubeArray[cnt].rotation.x = (CubeArray[cnt].rotation.x - Math.sin(new Date().getTime()) )
+					DirArray[cnt]===1 ? CubeArray[cnt].rotation.y = (CubeArray[cnt].rotation.y + Math.sin(new Date().getTime()) ) : CubeArray[cnt].rotation.y = (CubeArray[cnt].rotation.y - Math.sin(new Date().getTime()) )
+					DirArray[cnt]===1 ? CubeArray[cnt].rotation.z = (CubeArray[cnt].rotation.z + Math.sin(new Date().getTime()) ) : CubeArray[cnt].rotation.z = (CubeArray[cnt].rotation.z - Math.sin(new Date().getTime()))
+					
+
+					
+					DirArray[cnt]===1 ? CubeArray[cnt].rotation.x = Math.sin(new Date().getTime()) : CubeArray[cnt].rotation.x = Math.sin(new Date().getTime())
+					DirArray[cnt]===1 ? CubeArray[cnt].rotation.y = Math.sin(new Date().getTime()) : CubeArray[cnt].rotation.y = Math.sin(new Date().getTime())
+					DirArray[cnt]===1 ? CubeArray[cnt].rotation.z = Math.sin(new Date().getTime()) : CubeArray[cnt].rotation.z = Math.sin(new Date().getTime())
+					*/	
+					
+								}
+				
+				for ( var cnt = 0; cnt < numberOfTetraH; cnt++){
+
+					TetraDirArray[cnt]===1 ? TetraArray[cnt].rotation.x = (TetraArray[cnt].rotation.x - 0.01 ) : TetraArray[cnt].rotation.x = (TetraArray[cnt].rotation.x + 0.01 )
+					TetraDirArray[cnt]===1 ? TetraArray[cnt].rotation.y = (TetraArray[cnt].rotation.y + 0.01 ) : TetraArray[cnt].rotation.y = (TetraArray[cnt].rotation.y - 0.01 )
+					TetraDirArray[cnt]===1 ? TetraArray[cnt].rotation.z = (TetraArray[cnt].rotation.z - 0.01 ) : TetraArray[cnt].rotation.z = (TetraArray[cnt].rotation.z + 0.01 )
+								}
+
+				
+				
+				
+				if(camera.position.x > 5 && dirLockX) { turnX = true; dirLockX = false; randSpeed = Math.random();}
+				if(camera.position.x < -5 && !dirLockX) {turnX = false; dirLockX = true; randSpeed = Math.random();}
+				
+				if(camera.position.y > 6 && dirLockY) { turnY = true; dirLockY = false; randSpeed = Math.random();}
+				if(camera.position.y < -6 && !dirLockY) {turnY = false; dirLockY = true; randSpeed = Math.random();}
+				
+				if(camera.position.z > 4 && dirLockZ) { turnZ = true; dirLockZ = false; randSpeed = Math.random();}
+				if(camera.position.z < -0.5 && !dirLockZ) {turnZ = false; dirLockZ = true; randSpeed = Math.random();}
+				
+				
+				
+				turnX === true ? camera.position.x = camera.position.x - 0.02* randSpeed - 0.01 : camera.position.x = camera.position.x + 0.02  * randSpeed +0.01;
+				turnY === true ? camera.position.y = camera.position.y - 0.015 * randSpeed- 0.01: camera.position.y = camera.position.y + 0.015 * randSpeed + 0.01;
+				turnX === true ? camera.position.z = camera.position.z - 0.03 * randSpeed - 0.01: camera.position.z = camera.position.z + 0.03 * randSpeed +0.01;
+
+					
+				requestAnimationFrame(render); 
+				renderer.render(scene, camera);
+				}
+				
+				
+			render();
+			
+			
+			
+			
+			
+	 </script> 
+
+    </body>
+    
+    
+</html>
+</html>
+
+
+
+
+
+

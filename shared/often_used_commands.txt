@@ -1,0 +1,6 @@
+  225  nano /etc/vsftpd.user_list
+  226  sudo service vsftpd restart
+  227  deluser julian
+  228  adduser julian 
+  229  adduser julian usershare
+  230  ln -s /mnt/shared /home/julian/shared
