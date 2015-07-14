@@ -49,7 +49,7 @@ light.position.set(300, 300, 300);
 scene.add(light);
 
 
-var textShape = new THREE.TextGeometry('yoyoyoyo', {size: 330, height: 150, curveSegments: 6});
+var textShape = new THREE.TextGeometry('Pantida', {size: 330, height: 150, curveSegments: 6});
 var words = new THREE.Mesh(textShape, new THREE.MeshNormalMaterial());
 words.position.x = -400;
 words.position.y = -400;

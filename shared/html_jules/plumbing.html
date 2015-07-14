@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+  <head>
+    <title>TODO supply a title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/jquery-1.9.0-min.js"></script>
+    <script src="js/jquery-ui-1.9.2.min.js"></script>
+
+
+    <script src="js/jsPlumb/dist/js/jquery.jsPlumb-1.7.5-min.js "></script>
+
+  </head>
+  <body>
+    <div>
+	 <div style="position:relative; width: 500px; height: 500px;" id="plumbcontainer">
+	   <div style="position: absolute; padding: 50px; background-color: greenyellow;" id="element1">asdf</div>
+	   <div style="position: absolute" id="element2">fdas</div>
+
+	 </div>
+
+    </div>
+
+
+    <script>
+
+			jQuery(document).ready(function ($) {
+				jsPlumb.bind("ready", function () {
+					var firstInstance = jsPlumb.getInstance();
+					firstInstance.draggable('element1', {
+						containment: "body"
+					});
+
+					firstInstance.connect({
+						source: "element2",
+						target: "element1",
+						scope: "body"
+					});
+//					firstInstance.repaintEverything();
+				});
+			});
+
+
+
+    </script>
+
+  </body>
+</html>

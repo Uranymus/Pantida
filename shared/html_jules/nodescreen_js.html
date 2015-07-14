@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html  lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
@@ -8,6 +8,19 @@
     <!--<link rel="shortcut icon" href="images/favicon.png" type="image/png">-->
 
     <script src="js/three.min.js"></script>
+    <script src="js/angular/angular.min.js"></script>
+    <script type="text/javascript" src="js/angular/app.js"></script>
+    <!--    <script src="js/jquery-1.10.2.min.js"></script>
+	   <script src="js/jquery-migrate-1.2.1.min.js"></script>-->
+
+
+    <script src="js/jquery-1.9.0-min.js"></script>
+    <script src="js/jquery-ui-1.9.2.min.js"></script>
+
+
+    <script src="js/jsPlumb/dist/js/jquery.jsPlumb-1.7.5-min.js "></script>
+    <script src="js/nodescreenPlumb.js"></script>
+
     <script src="http://mrdoob.github.com/three.js/examples/fonts/helvetiker_regular.typeface.js"></script>
 
 
@@ -64,7 +77,8 @@
           <ul class="nav nav-pills nav-stacked nav-bracket">
             <li><a href="index.html"><i class="fa fa-home"></i> <span>Home</span></a></li>
             <li><a href="three.html"><i class="fa fa-map-marker"></i> <span>Three Test</span></a></li>
-
+		  <li><a href="createnode.html"><i class="fa fa-briefcase"></i> <span>Create a new Node</span></a></li>
+		  <li><a href="modifynode.html"><i class="fa fa-building"></i> <span>Modify a Node</span></a></li>
           </ul>
 
           <div class="infosummary">
@@ -84,7 +98,7 @@
           <a class="menutoggle"><i class="fa fa-bars"></i></a>
 
           <form class="searchform" action="index.html" method="post">
-            <input type="text" class="form-control" name="keyword" placeholder="Search here..." />
+            <input type="text" class="form-control" autocomplete="off" name="keyword" placeholder="Search here..." />
           </form>
 
           <div class="header-right">
@@ -125,42 +139,58 @@
           </div>
         </div>
 
-        <div class="contentpanel">
-          <h1>PANTIDA IS COMING</h1>
-          <p>IE6 will not be supportet </p>
+        <div class="contentpanel" id="contentpanel">
+
+          <h1  >Nodescreen</h1>
 
 
 
-          <div id="nodescreen" style="position: absolute; z-index: 1" >
-            <!--<canvas style="background-color: yellow;" id="canvas" width="150" height="150"></canvas>-->
+		<input  type="text" placeholder="Search Node" id="js--searchNode">
+
+		<div id="js--nodeload" style="display: hidden;"></div>
+
+
+		<div id="js--node" class="nodeMainBlock">
+		  <!--<div id="js--nodeMainBlock"  >-->
+		  <div class="nodeMainBlockHeader" id="js--nodeMainBlockHeader"></div>
+		  <div class="nodeMainBlockContent" id="js--nodeMainBlockContent"></div>
+
+
+		  <!--</div>-->
+		  <!--<div id="js--nodeProperties" class="nodeProperties"></div>-->
+		</div>
+		<div id="js--nodePropertyParents" class="nodePropertyParents"></div>
+
+          <!--<div id="nodescreen" style="position: absolute; z-index: 1" >-->
+		<!--<canvas style="background-color: yellow;" id="canvas" width="150" height="150"></canvas>-->
 
 
 
-            <div id="container"></div>
-		  <script src="js/threeCanvas.js"></script>
-          </div>
+		<!--<div id="container"></div>-->
+		<!--<script src="js/threeCanvas.js"></script>-->
+          <!--</div>-->
 
-          <div style=" z-index: 2" id="rightSidebar" class="rightSidebar">
-            <div id="connectedNodes" class="connectedLinks">
-              <h1>Connected Nodes</h1>
-              <ul>
-			 <li><a>Nodes</a></li>
-			 <li><a>Nodes</a></li>
-			 <li><a>Nodes</a></li>
-			 <li><a>Nodes</a></li>
-              </ul>
+		<!--		<div style=" z-index: 2" id="rightSidebar" class="rightSidebar">
+				  <div id="connectedNodes" class="connectedLinks">
+				    <h1>Connected Nodes</h1>
+				    <ul id="js--connectedNodesList">
+					 <li><a>Nodes</a></li>
+					 <li><a>Nodes</a></li>
+					 <li><a>Nodes</a></li>
+					 <li><a>Nodes</a></li>
+				    </ul>
 
-            </div>
-            <div id="filterConnect" class="filterConnectedLinks"></div>
-            <h1>Selected Filters</h1>
-            <ul>
-		    <li><p>Filter Checkbox</p></li>
-		    <li><p>Filter Checkbox</p></li>
-		    <li><p>Filter Checkbox</p></li>
-		    <li><p>Filter Checkbox</p></li>
-		    <li><p>Filter Searchbox</p></li>
-            </ul>
-          </div>
+				  </div>
+				  <div id="filterConnect" class="filterConnectedLinks"></div>
+				  <h1>Selected Filters</h1>
+				  <ul>
+				    <li><p>Filter Checkbox</p></li>
+				    <li><p>Filter Checkbox</p></li>
+				    <li><p>Filter Checkbox</p></li>
+				    <li><p>Filter Checkbox</p></li>
+				    <li><p>Filter Searchbox</p></li>
+				  </ul>
+				</div>-->
 
         </div>
       </div><!-- mainpanel -->
@@ -181,16 +211,17 @@
 
 
 
-    <script src="js/jquery-1.10.2.min.js"></script>
-    <script src="js/jquery-migrate-1.2.1.min.js"></script>
+
     <script src="js/bootstrap.min.js"></script>
     <script src="js/modernizr.min.js"></script>
     <script src="js/jquery.sparkline.min.js"></script>
     <script src="js/toggles.min.js"></script>
     <script src="js/retina.min.js"></script>
     <script src="js/jquery.cookies.js"></script>
+    <script src="js/draggable.js"></script>
     <script src="js/nodeScreen.js"></script>
-    <script src="js/canvas.js"></script>
+
+    <!--<script src="js/canvas.js"></script>-->
     <script src="js/custom.js"></script>
 
   </body>
